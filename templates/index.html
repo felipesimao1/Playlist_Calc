@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Tempo de Playlist</title>
+    <title>Playlist Calculator for Students</title>
     <!-- Inclua o Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
-    <h1 class="mb-4">Calculadora de Tempo de Playlist</h1>
+    <h1 class="mb-4">Playlist Calc</h1>
     <form action="/calcular" method="post">
         <div class="mb-3">
-            <label for="url" class="form-label">URL da Playlist:</label>
+            <label for="url" class="form-label">Playlist's URL:</label>
             <input type="text" name="url" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="horas_por_dia" class="form-label">Horas de Estudo por Dia:</label>
+            <label for="horas_por_dia" class="form-label">Time to study per day (in hours):</label>
             <input type="number" name="horas_por_dia" class="form-control" step="0.1" required>
         </div>
-        <button type="submit" class="btn btn-primary">Calcular Tempo Total</button>
+        <button type="submit" class="btn btn-primary">Calc Time</button>
     </form>
 
     {% if resultado %}
     <div class="mt-4">
         <h2>Resultado:</h2>
-        <p class="mb-2">Tempo total da playlist: {{ resultado.tempo_total }}</p>
-        <p>Dias necessários para completar: {{ resultado.dias_necessarios }}</p>
+        <p class="mb-2">TPlaylist's total time: {{ resultado.tempo_total }}</p>
+        <p>Necessary days to complete: {{ resultado.dias_necessarios }} estudando {{horas_por_dia}} horas por dia</p>
     </div>
     {% endif %}
 

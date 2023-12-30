@@ -7,27 +7,35 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/calcular', methods=['POST'])
-def calcular_tempo_total():
-    url_playlist = request.form['url']
-    horas_por_dia = float(request.form['horas_por_dia']) if request.form['horas_por_dia'] else 0
+@app.route('/calculate', methods=['POST'])
+def calculate_total_time():
+    # Get playlist URL and daily study hours from the form
+    playlist_url = request.form['url']
+    hours_per_day = float(request.form['hours_per_day']) if request.form['hours_per_day'] else 0
 
     try:
-        playlist = Playlist(url_playlist)
-        tempo_total = sum([video.length for video in playlist.videos])
+        # Retrieve playlist information using pytube
+        playlist = Playlist(playlist_url)
+        total_time = sum([video.length for video in playlist.videos])
 
-        horas_total, minutos_total = divmod(tempo_total, 3600)
-        minutos_total, segundos_total = divmod(minutos_total, 60)
+        # Convert total time to hours, minutes, and seconds
+        total_hours, remaining_minutes = divmod(total_time, 3600)
+        total_minutes, total_seconds = divmod(remaining_minutes, 60)
 
-        dias_necessarios = tempo_total / (3600 * horas_por_dia) if horas_por_dia > 0 else 0
+        # Calculate the number of days required to watch the playlist
+        days_required = total_time / (3600 * hours_per_day) if hours_per_day > 0 else 0
 
-        resultado = {
-            "tempo_total": f"{int(horas_total)}:{int(minutos_total)}:{int(segundos_total)}",
-            "dias_necessarios": round(dias_necessarios, 2)
+        # Prepare the result in a dictionary
+        result = {
+            "total_time": f"{int(total_hours)}:{int(total_minutes)}:{int(total_seconds)}",
+            "days_required": round(days_required, 2)
         }
-        return render_template('index.html', resultado=resultado, error=None)
+
+        # Render the result on the 'index.html' template
+        return render_template('index.html', result=result, error=None)
     except Exception as e:
-        return render_template('index.html', resultado=None, error=str(e))
+        # Handle exceptions and render an error message on the template
+        return render_template('index.html', result=None, error=str(e))
 
 if __name__ == "__main__":
     app.run(debug=True)
